@@ -1,0 +1,8 @@
+[submodule "skills/Supply-Chain-Pro"]
+	path = skills/Supply-Chain-Pro
+	url = https://github.com/pablocreelrc/Supply-Chain-Pro.git
+	branch = master
+[submodule "skills/Business-Analytics-Pro"]
+	path = skills/Business-Analytics-Pro
+	url = https://github.com/pablocreelrc/Business-Analytics-Pro.git
+	branch = master
