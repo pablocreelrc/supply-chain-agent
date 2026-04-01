@@ -1,0 +1,15 @@
+# Secrets
+.env
+
+# Generated outputs (local only)
+output/
+drafts/
+audit-reports/
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
