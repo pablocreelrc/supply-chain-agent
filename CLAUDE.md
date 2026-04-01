@@ -70,6 +70,21 @@ python scripts/shortcut_bridge.py "<prompt>" --output drafts/filename.xlsx
 - Sequence: build dependent sheets in order
 - For large models (10+ sheets), break into logical call groups
 
+### Document / Write-up Standards (Word & PDF)
+- Font: Calibri or Times New Roman, 11pt body, 14pt title
+- Structure: Executive summary up front, followed by detailed sections
+- Tables: IB-style with thin borders, header row shaded, right-aligned numbers
+- Page setup: 1" margins, professional header/footer with date and "Confidential"
+- Figures in $M or $B with one decimal unless precision matters
+
+### PDF Generation Rules (MANDATORY)
+When generating PDFs with fpdf2 or similar:
+1. Track Y position after every element — never assume fixed positions
+2. After images, advance Y by image height + margin before more text
+3. After `multi_cell()`, do NOT manually set Y to a hardcoded value
+4. Check `get_y() > page_height - margin` before each new section
+5. After generating, re-open with pypdf/fitz to verify no text overlap
+
 ## Data Input
 
 Accept any format:
@@ -93,6 +108,8 @@ Detect user intent and route output:
 | "Excel", "spreadsheet", "model", "workbook", "build" | Excel (default) |
 | "Python", "script", "compute", "simulate", "optimize" | Python |
 | "both", "build and run" | Both (Python computes, Shortcut.ai formats) |
+| "Word", "document", "write-up", "memo", "report" | Word (.docx) |
+| "PDF", "presentation", "one-pager" | PDF |
 | "explain", "teach", "how does", "what is" | Teach (no files) |
 | No signal | Default to Excel |
 
