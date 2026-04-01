@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Read",
+      "Write",
+      "Edit",
+      "Bash",
+      "Glob",
+      "Grep"
+    ]
+  },
+  "plugins": [
+    {
+      "name": "supply-chain-pro",
+      "path": "./skills/Supply-Chain-Pro"
+    },
+    {
+      "name": "business-analytics-pro",
+      "path": "./skills/Business-Analytics-Pro"
+    }
+  ]
+}
