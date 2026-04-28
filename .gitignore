@@ -13,3 +13,9 @@ Thumbs.db
 # Python
 __pycache__/
 *.pyc
+
+# Client research and per-engagement memory — local-only filesystem memory,
+# never pushed. The agent may create clients/<slug>/ as it works; those
+# folders must not leak into the public repo or to other employees.
+# Top-level files like clients/README.md remain trackable.
+clients/*/
