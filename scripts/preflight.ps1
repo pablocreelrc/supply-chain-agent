@@ -105,6 +105,14 @@ if (-not (Test-Path $EnvFile)) {
     } else {
         Write-Fail "USER_ID not set or still a placeholder"
     }
+    if ($envContent -match "(?m)^USER_ID=pablocreelrc$") {
+        Write-Fail "USER_ID is set to 'pablocreelrc' — that handle is reserved for Pablo's own machine. Set it to YOUR GitHub handle."
+    }
+    if ($envContent -match "(?m)^TENANT=[a-zA-Z0-9_-]+$" -and $envContent -notmatch "(?m)^TENANT=<your-company-slug>") {
+        Write-Pass "TENANT set to a real company/engagement slug (not placeholder)"
+    } else {
+        Write-Fail "TENANT not set or still a placeholder — required for per-customer rollup in Langfuse. Pablo provides the slug; common values: sacrificio, desclub, ajolote, internal."
+    }
     if ($envContent -match "(?m)^OTEL_EXPORTER_OTLP_HEADERS=op://AI Agents/Langfuse/auth_header$") {
         Write-Pass "OTEL_EXPORTER_OTLP_HEADERS uses op:// reference"
     } else {
@@ -114,6 +122,26 @@ if (-not (Test-Path $EnvFile)) {
         Write-Pass "OTEL endpoint = US region"
     } else {
         Write-Fail "OTEL endpoint not pointing at us.cloud.langfuse.com"
+    }
+    if ($envContent -match "(?m)^OTEL_TRACES_EXPORTER=otlp$") {
+        Write-Pass "OTEL_TRACES_EXPORTER=otlp set (traces export reliably)"
+    } else {
+        Write-Fail "OTEL_TRACES_EXPORTER=otlp missing — traces may not export. Copy the line from .env.example."
+    }
+    if ($envContent -match "(?m)^OTEL_LOGS_EXPORTER=none$") {
+        Write-Pass "OTEL_LOGS_EXPORTER=none set (Langfuse doesn't accept OTLP logs)"
+    } else {
+        Write-Warn "OTEL_LOGS_EXPORTER not set to 'none' — Claude Code will repeatedly POST to a 404 endpoint at Langfuse"
+    }
+    if ($envContent -match "(?m)^CLAUDE_CODE_ENHANCED_TELEMETRY_BETA=1$") {
+        Write-Pass "CLAUDE_CODE_ENHANCED_TELEMETRY_BETA=1 set (spans actually emitted)"
+    } else {
+        Write-Fail "CLAUDE_CODE_ENHANCED_TELEMETRY_BETA=1 missing — Claude Code will NOT emit spans, Langfuse Traces tab stays empty. Copy the line from .env.example."
+    }
+    if ($envContent -match "(?m)^OTEL_METRIC_EXPORT_INTERVAL=\d+$") {
+        Write-Pass "OTEL_METRIC_EXPORT_INTERVAL set (short sessions won't lose metrics)"
+    } else {
+        Write-Fail "OTEL_METRIC_EXPORT_INTERVAL missing — short /command sessions can drop metrics. Copy the line from .env.example."
     }
 }
 

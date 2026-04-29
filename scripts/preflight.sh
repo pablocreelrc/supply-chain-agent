@@ -114,6 +114,14 @@ else
     if grep -qE "^USER_ID=<your-github-handle>" "$ENV_FILE"; then
         fail "USER_ID is still the placeholder '<your-github-handle>'"
     fi
+    if grep -qE "^USER_ID=pablocreelrc$" "$ENV_FILE"; then
+        fail "USER_ID is set to 'pablocreelrc' — that handle is reserved for Pablo's own machine. Set it to YOUR GitHub handle."
+    fi
+    if grep -qE "^TENANT=[a-zA-Z0-9_-]+$" "$ENV_FILE" && ! grep -qE "^TENANT=<your-company-slug>" "$ENV_FILE"; then
+        ok "TENANT set to a real company/engagement slug (not placeholder)"
+    else
+        fail "TENANT not set or still a placeholder — required for per-customer rollup in Langfuse. Pablo provides the slug; common values: sacrificio, desclub, ajolote, internal."
+    fi
     if grep -qE "^OTEL_EXPORTER_OTLP_HEADERS=op://AI Agents/Langfuse/auth_header$" "$ENV_FILE"; then
         ok "OTEL_EXPORTER_OTLP_HEADERS uses op:// reference"
     else
@@ -123,6 +131,26 @@ else
         ok "OTEL endpoint = US region"
     else
         fail "OTEL endpoint not pointing at us.cloud.langfuse.com"
+    fi
+    if grep -qE "^OTEL_TRACES_EXPORTER=otlp$" "$ENV_FILE"; then
+        ok "OTEL_TRACES_EXPORTER=otlp set (traces export reliably)"
+    else
+        fail "OTEL_TRACES_EXPORTER=otlp missing — traces may not export. Copy the line from .env.example."
+    fi
+    if grep -qE "^OTEL_LOGS_EXPORTER=none$" "$ENV_FILE"; then
+        ok "OTEL_LOGS_EXPORTER=none set (Langfuse doesn't accept OTLP logs)"
+    else
+        warn "OTEL_LOGS_EXPORTER not set to 'none' — Claude Code will repeatedly POST to a 404 endpoint at Langfuse"
+    fi
+    if grep -qE "^CLAUDE_CODE_ENHANCED_TELEMETRY_BETA=1$" "$ENV_FILE"; then
+        ok "CLAUDE_CODE_ENHANCED_TELEMETRY_BETA=1 set (spans actually emitted)"
+    else
+        fail "CLAUDE_CODE_ENHANCED_TELEMETRY_BETA=1 missing — Claude Code will NOT emit spans, Langfuse Traces tab stays empty. Copy the line from .env.example."
+    fi
+    if grep -qE "^OTEL_METRIC_EXPORT_INTERVAL=[0-9]+$" "$ENV_FILE"; then
+        ok "OTEL_METRIC_EXPORT_INTERVAL set (short sessions won't lose metrics)"
+    else
+        fail "OTEL_METRIC_EXPORT_INTERVAL missing — short /command sessions can drop metrics. Copy the line from .env.example."
     fi
 fi
 

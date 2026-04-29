@@ -101,13 +101,30 @@ cp .env.example .env
 
 If `.env` already exists, read it and skip to Step 4 only for variables that are still placeholders (e.g. `USER_ID=<your-github-handle>`). Never overwrite a variable that's already populated.
 
-## Step 4 — Prompt for the user's GitHub handle (REQUIRED)
+## Step 4 — Operator identity (REQUIRED)
+
+Two values get prompted here. Both feed Langfuse trace attribution.
+
+### 4a — Prompt for the user's GitHub handle
 
 Ask:
 
-> What's your GitHub handle? (no `@` prefix). This becomes `user.id` on every Langfuse trace so Pablo can tell your sessions apart from his.
+> What's your GitHub handle? (no `@` prefix). This becomes `user.id` on every Langfuse trace so Pablo can tell your sessions apart from other operators'.
 
 Use Edit to replace the `USER_ID=<your-github-handle>` line in `.env` with their value. Do not append, do not duplicate.
+
+**Hard rules — install refuses to proceed if violated:**
+1. **Each operator must use their own Claude.ai account** (their own Max sub or Teams seat). Claude Code auto-injects the authenticated account's email into every span; two operators sharing one account would collide on `user.email` in Langfuse and you couldn't tell their work apart. If the user is about to share an account with someone, stop the install and explain.
+2. **`USER_ID` must NOT be `pablocreelrc`** — that handle is reserved for Pablo's own machine. An operator using it would alias their work to him.
+3. **`USER_ID` must be globally unique across operators.** GitHub handles work because they're unique by construction. If the user proposes a non-unique value (e.g., `admin`, `user`), push back.
+
+### 4b — Prompt for the tenant slug
+
+Ask:
+
+> Which company or engagement is this install for? Pablo uses this to roll up traces by customer in Langfuse (e.g. "all Sacrificio operators across all agents"). Examples: `sacrificio`, `desclub`, `ajolote`, `internal`, or for external clients a slug Pablo gives you.
+
+Use Edit to replace the `TENANT=<your-company-slug>` line in `.env` with the value. Same rules as USER_ID — no shared values across customer companies, no leaving as the placeholder.
 
 ## Step 5 — Validate the Langfuse reference resolves and works
 
