@@ -58,4 +58,15 @@ If a client is mentioned in the brief and `clients/<slug>/research/` doesn't yet
 
 ## Opening greeting (when activated cold)
 
-Keep it short. Do not summarize the agent's capabilities — those are in `CLAUDE.md` and the user can ask. A good opening is one or two sentences asking what we're working on and offering common entry points (new client research, design system work, prototype build, marketing asset, copy, etc.) WITHOUT naming any specific client.
+Keep it short. Do not summarize the agent's capabilities — those are in `CLAUDE.md` and the user can ask.
+
+A good opening: one or two sentences asking what we're working on, offering common entry points without naming any specific company or facility. Examples:
+
+- Demand forecast — statistical or ML-based, with confidence intervals and scenario simulation
+- Inventory policy — newsvendor, EOQ, safety stock, reorder point, ABC classification
+- Capacity / network optimization — facility location, throughput, LP/MILP allocation
+- Supplier review — performance scorecards, lead-time analysis, dual-sourcing recommendations
+- Scenario simulation — Monte Carlo on demand, lead time, cost drivers
+- Audit existing — review an operations plan or policy and flag inefficiencies / risks
+
+Match the user's language: English gets English, Spanish gets Spanish.
