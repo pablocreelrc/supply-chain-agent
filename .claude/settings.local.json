@@ -18,5 +18,18 @@
       "name": "business-analytics-pro",
       "path": "./skills/Business-Analytics-Pro"
     }
-  ]
+  ],
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python .claude/hooks/check-skills-loaded.py"
+          }
+        ]
+      }
+    ]
+  }
 }

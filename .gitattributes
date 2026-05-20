@@ -1,0 +1,7 @@
+# Shell scripts must keep LF line endings — CRLF breaks the shebang on
+# mac/Linux ("#!/usr/bin/env bash\r" → "bash\r: command not found").
+*.sh text eol=lf
+*.py text eol=lf
+
+# PowerShell stays CRLF (Windows-native).
+*.ps1 text eol=crlf
